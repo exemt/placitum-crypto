@@ -24,7 +24,7 @@ ARG REVISION=unknown
 LABEL org.opencontainers.image.title="placitum/crypto" \
       org.opencontainers.image.description="Placitum crypto service: opens stored object envelopes with the installation key" \
       org.opencontainers.image.source="https://github.com/exemt/placitum-crypto" \
-      org.opencontainers.image.licenses="LicenseRef-Placitum" \
+      org.opencontainers.image.licenses="Apache-2.0" \
       org.opencontainers.image.version="${VERSION}" \
       org.opencontainers.image.revision="${REVISION}"
 
