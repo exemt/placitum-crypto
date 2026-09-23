@@ -2,9 +2,9 @@
 
 English · [Русский](README.ru.md)
 
-Holder of the private installation key, next to the controller. It does one thing: on the
-controller's request it opens the envelope of a stored object (a certificate, a private key, a
-chain or a CRL) and returns metadata, never the plaintext.
+The process that holds the private installation key, next to the controller. On the controller's
+request it opens the envelope of a stored object (a certificate, a private key, a chain or a CRL)
+and returns its metadata; the plaintext stays inside this process.
 
 The controller must never see the plaintext of secrets uploaded through the panel. The operator
 still needs to see the SANs and validity of a certificate and to know that the key matches it.
@@ -16,7 +16,7 @@ panel ──► controller ──► crypto ── fetches the ciphertext from t
                            └──►    metadata: SANs, validity, key match
 ```
 
-The controller passes only the scope and object UUIDs. The plaintext never leaves the process.
+The controller passes only the scope and object UUIDs.
 
 ## Build and run
 
@@ -55,19 +55,18 @@ Errors are JSON with an `error` code:
 | `502` | `controller_unreachable` | the controller could not be reached |
 | `503` | `key_unavailable` | the process was started without a key |
 
-## Good to know
+## Keys and envelope
 
-- **The installation key is the same one node agents use**: the private half, as a file readable
-  only by the process. The controller holds the public half.
-- **One envelope format** for everyone who writes or reads it: version, big-endian length of the
-  wrapped key, RSA-OAEP-SHA256, then AES-256-GCM.
-- **No database and no state**: a restart loses nothing.
-- **Not checked here**: the chain against system trust and the CRL signature. The controller
-  matches the CRL issuer with the root.
+The installation key is the same one node agents use: the private half, as a file readable only by
+the process, while the controller holds the public half. Everyone who writes or reads an envelope
+uses one format: version, big-endian length of the wrapped key, RSA-OAEP-SHA256, then AES-256-GCM.
+The process keeps no database and no state, so a restart loses nothing. The chain is not checked
+against system trust here, and the CRL signature is not verified; the controller matches the CRL
+issuer with the root.
 
 ## License
 
 [Apache License 2.0](LICENSE); the attribution notice is in [NOTICE](NOTICE). This repository is
 part of the Placitum open core. The inspectors are licensed separately: each inspector repository
-carries the Placitum License Agreement. Releases made before this change came under the Placitum
+carries the Placitum License Agreement. Versions up to 1.0.1 were released under the Placitum
 License Agreement 1.1.
